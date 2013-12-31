@@ -10,7 +10,14 @@
 
 module.exports = function (grunt) {
 
-  grunt.loadNpmTasks('grunt-git');
+  grunt.registerTask("cloneFromGit", 'Cloning from git repo', function () {
+    var done = this.async(),
+      options = this.options();
+    var spawnedWorker = grunt.util.spawn({cmd: "git", args: ["clone", options.url, options.directory, "--verbose" ], opts: {stdio: 'inherit' }}, function (error, result, code) {
+      done();
+    });
+  });
+
 
   grunt.registerTask("installModuleDependency", 'Installing the dependent node modules,', function () {
     var done = this.async(),
@@ -46,13 +53,11 @@ module.exports = function (grunt) {
         oldModulePath: [ options.directory ],
         gitReference: [ options.directory + "/.git" ]
       },
-      gitclone: {
-        cloneRepo: {
-          options: {
-            repository: options.url,
-            branch: options.branch,
-            directory: options.directory
-          }
+      cloneFromGit: {
+        options: {
+          url: options.url,
+          branch: options.branch,
+          directory: options.directory
         }
       },
       installModuleDependency: {
@@ -62,7 +67,7 @@ module.exports = function (grunt) {
       }
     });
 
-    grunt.task.run(['clean:oldModulePath', 'gitclone:cloneRepo', 'clean:gitReference', 'installModuleDependency:npmInstall']);
+    grunt.task.run(['clean:oldModulePath', 'cloneFromGit', 'clean:gitReference', 'installModuleDependency:npmInstall']);
     grunt.log.write('Cloning done').ok();
   });
 };

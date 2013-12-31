@@ -1,6 +1,6 @@
 {
   "name": "grunt-git-to-nodemodules",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Simply copy node_module from git to node_modules folder",
   "keywords": ["grunt",
     "node_modules",
@@ -27,14 +27,10 @@
   "scripts": {
     "test": "grunt"
   },
-  "dependencies": {
-    "grunt-git": "~0.2.3",
-    "grunt-contrib-clean": "latest"
-  },
   "devDependencies": {
+    "grunt-contrib-clean": "latest",
     "grunt": "latest",
     "grunt-cli": "latest"
-
   },
   "engines": {
     "node": ">=0.8.0"

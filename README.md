@@ -4,16 +4,12 @@ Simply copy node_modules from git to project node_modules folder
 
 This grunt plugin is to support installing private node_modules where you can not add a node module to the npm neither on github. But somewhere which supports git (for example : assembla.com)
 
-##This plugin is built on top of
-* [grunt-git](https://github.com/rubenv/grunt-git)
-* [grunt-contrib-copy](https://github.com/gruntjs/grunt-contrib-copy)
-
 ## Getting Started
 This plugin requires Grunt
 
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
-```gitToNodeModules
+```shell
 npm install grunt-git-to-nodemodules --save-dev
 ```
 
