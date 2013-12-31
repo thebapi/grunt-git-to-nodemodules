@@ -43,8 +43,7 @@ In your project's Gruntfile, add a section named `gitToNodeModules` to the data 
 require('grunt-git-to-nodemodules')(grunt);
 
   grunt.initConfig({
-
-    gitToNodeModule: {
+    gitToNodeModules: {
       load: {
         options: {
           url : 'git@github.com:thebapi/connect-mongo-session-store.git',
