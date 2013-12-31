@@ -9,7 +9,9 @@
 'use strict';
 
 module.exports = function (grunt) {
+
   grunt.loadNpmTasks('grunt-git');
+
   grunt.registerTask("installModuleDependency", 'Installing the dependent node modules,', function () {
     var done = this.async(),
       options = this.options();
