@@ -10,11 +10,22 @@
 
 module.exports = function (grunt) {
 
-  grunt.registerMultiTask('gitToNodeModules', 'Clone node module from git to node_modules.', function () {
-
+  grunt.registerTask("installModuleDependency", 'Installing the dependent node modules,', function () {
     var done = this.async(),
       options = this.options();
+    grunt.log.write('Installing the dependent node modules').ok();
+    grunt.log.write(options.directory);
+    var spawnedWorker = grunt.util.spawn({cmd: "npm", args: ["install", "--verbose"], opts: {cwd: options.directory, stdio: 'inherit' }}, function (error, result, code) {
+      grunt.log.write("Installing the dependent node modules  done!!!").ok();
+      done();
+    });
+    spawnedWorker.stdout.pipe(process.stdout);
+    spawnedWorker.stderr.pipe(process.stderr);
+  });
 
+  grunt.registerMultiTask("gitToNodeModules", 'Clone node module from git to node_modules.', function () {
+
+    var options = this.options();
     if (!options.url) {
       grunt.fail.fatal("Git url not specified");
     }
@@ -41,9 +52,15 @@ module.exports = function (grunt) {
             directory: options.directory
           }
         }
+      },
+      installModuleDependency: {
+        options: {
+          directory: options.directory
+        }
       }
     });
-    grunt.task.run(['clean:oldModulePath', 'gitclone:cloneRepo', 'clean:gitReference']);
-    done();
+
+    grunt.task.run(['clean:oldModulePath', 'gitclone:cloneRepo', 'clean:gitReference', 'installModuleDependency:npmInstall']);
+    grunt.log.write('Cloning done').ok();
   });
 };
