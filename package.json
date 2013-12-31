@@ -1,0 +1,42 @@
+{
+  "name": "grunt-git-to-nodemodules",
+  "version": "0.0.1",
+  "description": "Simply copy node_module from git to node_modules folder",
+  "keywords": ["grunt",
+    "node_modules",
+    "git",
+    "tasks"],
+  "homepage": "https://github.com/thebapi/grunt-git-to-nodemodules.git",
+  "bugs": {
+    "url": "https://github.com/thebapi/grunt-git-to-nodemodules/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Sajib Sarkar",
+    "email": "thebapi@gmail.com",
+    "url": "http://sajibsarkar.com"
+  },
+  "files": [
+    "tasks/grunt-git-to-nodemodules.js"
+  ],
+  "main": "tasks/grunt-git-to-nodemodules",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thebapi/grunt-git-to-nodemodules.git"
+  },
+  "scripts": {
+    "test": "grunt"
+  },
+  "dependencies": {
+    "grunt-contrib-clean": "latest",
+    "grunt-git": "~0.2.3"
+  },
+  "devDependencies": {
+    "grunt": "latest",
+    "grunt-cli": "latest"
+
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  }
+}
