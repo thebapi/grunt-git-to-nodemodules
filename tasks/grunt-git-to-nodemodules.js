@@ -8,14 +8,18 @@
 
 'use strict';
 
+var fs = require("fs");
+
 module.exports = function (grunt) {
 
   grunt.registerTask("cloneFromGit", 'Cloning from git repo', function () {
     var done = this.async(),
       options = this.options();
-    var spawnedWorker = grunt.util.spawn({cmd: "git", args: ["clone", options.url, options.directory, "--verbose" ], opts: {stdio: 'inherit' }}, function (error, result, code) {
+
+    grunt.util.spawn({cmd: "git", args: ["clone", options.url, options.directory, "--verbose" ], opts: {stdio: 'inherit' }}, function (error, result, code) {
       done();
     });
+
   });
 
 
@@ -24,17 +28,19 @@ module.exports = function (grunt) {
       options = this.options();
     grunt.log.write('Installing the dependent node modules').ok();
     grunt.log.write(options.directory);
-    var spawnedWorker = grunt.util.spawn({cmd: "npm", args: ["install", "--verbose"], opts: {cwd: options.directory, stdio: 'inherit' }}, function (error, result, code) {
+    grunt.util.spawn({cmd: "npm", args: ["install"], opts: {cwd: options.directory, stdio: 'inherit' }}, function (error, result, code) {
       grunt.log.write("Installing the dependent node modules  done!!!").ok();
       done();
     });
-    spawnedWorker.stdout.pipe(process.stdout);
-    spawnedWorker.stderr.pipe(process.stderr);
+
   });
 
   grunt.registerMultiTask("gitToNodeModules", 'Clone node module from git to node_modules.', function () {
 
-    var options = this.options();
+    var options = this.options(),
+      taskList = [],
+      moduleGitReferenceFolder = options.directory + "/.git";
+
     if (!options.url) {
       grunt.fail.fatal("Git url not specified");
     }
@@ -51,7 +57,7 @@ module.exports = function (grunt) {
     grunt.config.init({
       clean: {
         oldModulePath: [ options.directory ],
-        gitReference: [ options.directory + "/.git" ]
+        gitReference: [ moduleGitReferenceFolder ]
       },
       cloneFromGit: {
         options: {
@@ -67,7 +73,19 @@ module.exports = function (grunt) {
       }
     });
 
-    grunt.task.run(['clean:oldModulePath', 'cloneFromGit', 'clean:gitReference', 'installModuleDependency:npmInstall']);
-    grunt.log.write('Cloning done').ok();
+    if (fs.existsSync(options.directory)) {
+      taskList.push('clean:oldModulePath');
+    }
+
+    taskList.push('cloneFromGit');
+
+    if (fs.existsSync(moduleGitReferenceFolder)) {
+      taskList.push('clean:gitReference');
+    }
+
+    taskList.push('installModuleDependency:npmInstall');
+
+    grunt.task.run(taskList);
+
   });
 };
