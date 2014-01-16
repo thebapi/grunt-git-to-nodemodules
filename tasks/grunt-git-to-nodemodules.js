@@ -9,14 +9,24 @@
 'use strict';
 
 var fs = require("fs");
+var rimraf = require("rimraf");
 
 module.exports = function (grunt) {
 
   grunt.registerTask("cloneFromGit", 'Cloning from git repo', function () {
     var done = this.async(),
-      options = this.options();
+      options = this.options(),
+      moduleGitReferenceFolder = options.directory + "/.git";
 
+    if (fs.existsSync(options.directory)) {
+      grunt.log.write('Clearing the module installation path.').ok();
+      rimraf.sync(options.directory);
+    }
     grunt.util.spawn({cmd: "git", args: ["clone", options.url, options.directory, "--verbose" ], opts: {stdio: 'inherit' }}, function (error, result, code) {
+      if (fs.existsSync(moduleGitReferenceFolder)) {
+        grunt.log.write('Clearing the module git folder.').ok();
+        rimraf.sync(moduleGitReferenceFolder);
+      }
       done();
     });
 
@@ -38,8 +48,7 @@ module.exports = function (grunt) {
   grunt.registerMultiTask("gitToNodeModules", 'Clone node module from git to node_modules.', function () {
 
     var options = this.options(),
-      taskList = [],
-      moduleGitReferenceFolder = options.directory + "/.git";
+      taskList = [];
 
     if (!options.url) {
       grunt.fail.fatal("Git url not specified");
@@ -55,10 +64,6 @@ module.exports = function (grunt) {
 
     grunt.log.write('Starting cloning node_modules from git to node_modules').ok();
     grunt.config.init({
-      clean: {
-        oldModulePath: [ options.directory ],
-        gitReference: [ moduleGitReferenceFolder ]
-      },
       cloneFromGit: {
         options: {
           url: options.url,
@@ -73,15 +78,7 @@ module.exports = function (grunt) {
       }
     });
 
-    if (fs.existsSync(options.directory)) {
-      taskList.push('clean:oldModulePath');
-    }
-
     taskList.push('cloneFromGit');
-
-    if (fs.existsSync(moduleGitReferenceFolder)) {
-      taskList.push('clean:gitReference');
-    }
 
     taskList.push('installModuleDependency:npmInstall');
 
