@@ -43,7 +43,7 @@ require('grunt-git-to-nodemodules')(grunt);
       load: {
         options: {
           url : 'git@github.com:thebapi/connect-mongo-session-store.git',
-          directory: 'node_modules/connect-mongo-session-store'
+          directory: './node_modules/connect-mongo-session-store'
         }
       }
     }
