@@ -1,6 +1,6 @@
 {
   "name": "grunt-git-to-nodemodules",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Simply copy node_module from git to node_modules folder",
   "keywords": [
     "grunt",
